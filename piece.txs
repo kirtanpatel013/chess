@@ -1,0 +1,90 @@
+interface Props {
+  type: 'p' | 'r' | 'n' | 'b' | 'q' | 'k';
+  color: 'w' | 'b';
+  className?: string;
+}
+
+export function Piece({ type, color, className }: Props) {
+  const fill = color === 'w' ? '#ffffff' : '#000000';
+  const stroke = color === 'w' ? '#4a4a4a' : '#2b2b2b';
+  const sw = color === 'w' ? 1.2 : 0.8;
+  const common = { fill, stroke, strokeWidth: sw, strokeLinejoin: 'round' as const };
+
+  let inner: JSX.Element;
+  switch (type) {
+    case 'p':
+      inner = (
+        <>
+          <circle cx={22} cy={14} r={6} {...common} />
+          <path d="M14 33 C14 24 30 24 30 33 L32 38 L12 38 Z" {...common} />
+          <rect x={10} y={38} width={24} height={5} rx={1} {...common} />
+        </>
+      );
+      break;
+    case 'r':
+      inner = (
+        <>
+          <rect x={11} y={10} width={4} height={6} {...common} />
+          <rect x={19} y={10} width={4} height={6} {...common} />
+          <rect x={27} y={10} width={4} height={6} {...common} />
+          <rect x={10} y={15} width={24} height={6} {...common} />
+          <path d="M13 21 L31 21 L29 34 L15 34 Z" {...common} />
+          <rect x={10} y={34} width={24} height={6} rx={1} {...common} />
+        </>
+      );
+      break;
+    case 'n':
+      // Horse-head profile. Deliberately not the same body shape as the
+      // bishop/king — an earlier version reused that silhouette and the
+      // knight was unreadable at board scale.
+      inner = (
+        <>
+          <path
+            d="M9,21 C9,17 11,13 15,10 L18,5.5 L22,9 C26,8.5 29,10.5 30,13.5 C31,16 29.5,17.5 28,17 C30,19 29.5,21.5 27.5,21 C29.5,23.5 28.5,26 26,25.5 C27,28 27.5,31 30,33.5 L30,38 L11,38 C10.5,34 9,29 9,24 Z"
+            {...common}
+          />
+          <circle cx={14} cy={17.5} r={1.4} fill={stroke} />
+        </>
+      );
+      break;
+    case 'b':
+      inner = (
+        <>
+          <circle cx={22} cy={12} r={4} {...common} />
+          <path d="M15 33 C13 24 17 20 22 16 C27 20 31 24 29 33 Z" {...common} />
+          <line x1={18} y1={22} x2={26} y2={22} stroke={stroke} strokeWidth={1.3} />
+          <rect x={13} y={33} width={18} height={5} rx={1} {...common} />
+          <rect x={11} y={38} width={22} height={5} rx={1} {...common} />
+        </>
+      );
+      break;
+    case 'q':
+      inner = (
+        <>
+          <path d="M12 20 L16 10 L20 18 L22 9 L24 18 L28 10 L32 20 L29 33 L15 33 Z" {...common} />
+          <rect x={13} y={33} width={18} height={5} rx={1} {...common} />
+          <rect x={10} y={38} width={24} height={5} rx={1} {...common} />
+        </>
+      );
+      break;
+    case 'k':
+      // Big, unambiguous cross + a wider crowned base so it never reads
+      // as "just another bishop" the way the first version did.
+      inner = (
+        <>
+          <rect x={20.5} y={4} width={3} height={9} {...common} />
+          <rect x={17.5} y={7.5} width={9} height={3} {...common} />
+          <path d="M13 33 C11 25 13 20 22 18 C31 20 33 25 31 33 Z" {...common} />
+          <path d="M13 33 L31 33 L29 37 L15 37 Z" {...common} />
+          <rect x={10} y={37} width={24} height={6} rx={1} {...common} />
+        </>
+      );
+      break;
+  }
+
+  return (
+    <svg viewBox="0 0 44 44" className={className} style={{ filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.4))' }}>
+      {inner}
+    </svg>
+  );
+}
